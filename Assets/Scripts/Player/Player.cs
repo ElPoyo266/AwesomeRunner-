@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Health))]
@@ -62,10 +63,10 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
     {
         PlayerHealth.OnOutOfHealth += Die;
     }
-    private void OnDisable()
-    {
-        PlayerHealth.OnOutOfHealth -= Die;
-    }
+    // private void OnDisable()
+    // {
+    //     PlayerHealth.OnOutOfHealth -= Die;
+    // }
     private void Start()
     {
         PlayerStateMachine.SetState(PlayerStateMachine.PlayerStartingIdleState);
@@ -109,6 +110,8 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
     {
         PlayerStateMachine.SetState(PlayerStateMachine.PlayerDeadState);
         GameSession.Instance.UpdateScoreboard(new ScoreboardEntry(name,PlayerStatictics.Score));
+
+        SceneManager.LoadScene("MainMenu");
     }
 
     public IEnumerator GrantInvincibility()

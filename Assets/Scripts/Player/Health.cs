@@ -31,10 +31,11 @@ public class Health : MonoBehaviour, IDamageable,IHealable, IResettable
     public event EventHandler<HealthArgs> OnHealthChanged = delegate { };
     public event Action OnOutOfHealth;
 
-    private int defaultMaxLives = 4;//PLAYER DATA ScriptableObject
+    private int defaultMaxLives = 2;//PLAYER DATA ScriptableObject
     void Awake()
     {
-        MaxHealth = 4;
+        MaxHealth = 1;
+        CurrentHealth = 1;
         healthArgs = new HealthArgs(CurrentHealth, MaxHealth);
         healthBarView.CreateHealthBar(healthArgs);
         healthBarView.Show(true);
@@ -42,10 +43,12 @@ public class Health : MonoBehaviour, IDamageable,IHealable, IResettable
     } 
     public void TakeDamage(int amount)
     {
-        CurrentHealth -= amount;
-        OnHealthChanged(this, healthArgs.GetUpdatedArgs(CurrentHealth, MaxHealth));
-        healthBarView.UpdateHealthBar(this, healthArgs.GetUpdatedArgs(CurrentHealth, MaxHealth));
-        if (CurrentHealth < 1)
+        if(CurrentHealth > 0){
+            CurrentHealth -= amount;
+            OnHealthChanged(this, healthArgs.GetUpdatedArgs(CurrentHealth, MaxHealth));
+            healthBarView.UpdateHealthBar(this, healthArgs.GetUpdatedArgs(CurrentHealth, MaxHealth));
+        }
+        else if (CurrentHealth < 1)
         {
             OnOutOfHealth?.Invoke();
         }
