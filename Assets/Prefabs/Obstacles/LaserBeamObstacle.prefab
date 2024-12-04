@@ -5282,7 +5282,6 @@ GameObject:
   - component: {fileID: 6716018880928220119}
   - component: {fileID: 1025123548548066387}
   - component: {fileID: 2240087943492607746}
-  - component: {fileID: 6340270343119233866}
   m_Layer: 0
   m_Name: LaserBeamObstacle
   m_TagString: Untagged
@@ -5361,22 +5360,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.1129975, y: 1.5209706, z: 1}
   m_Center: {x: 4.0537443, y: 0.59287155, z: 0}
---- !u!54 &6340270343119233866
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7598995731591288687}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &8716978092205909190
 GameObject:
   m_ObjectHideFlags: 0

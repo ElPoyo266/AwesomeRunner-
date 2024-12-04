@@ -30,10 +30,10 @@ public class Coin : PoolingObject<Coin>, ICollectable,IResettable
     }
     public void ResetToDefault()
     {
-        //gameObject.transform.localRotation = Quaternion.identity;
-        //gameObject.transform.localScale = Vector3.one;  
-        //gameObject.transform.localPosition = Vector3.zero;
-        //gameObject.SetActive(true);
-       // gameObject.transform.SetParent(null);
+        gameObject.transform.localRotation = Quaternion.identity;
+        gameObject.transform.localScale = Vector3.one;
+        gameObject.transform.localPosition = Vector3.zero;
+        gameObject.SetActive(true);
+        gameObject.transform.SetParent(null);
     }
 }

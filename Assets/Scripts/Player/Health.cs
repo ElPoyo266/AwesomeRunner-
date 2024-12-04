@@ -31,23 +31,23 @@ public class Health : MonoBehaviour, IDamageable,IHealable, IResettable
     public event EventHandler<HealthArgs> OnHealthChanged = delegate { };
     public event Action OnOutOfHealth;
 
-    private int defaultMaxLives = 4;//PLAYER DATA ScriptableObject
+    private int defaultMaxLives = 1;//PLAYER DATA ScriptableObject
     void Awake()
     {
-        MaxHealth = 4;
+        MaxHealth = 1;
+        CurrentHealth = 1;
         healthArgs = new HealthArgs(CurrentHealth, MaxHealth);
-        healthBarView.CreateHealthBar(healthArgs);
-        healthBarView.Show(true);
         ResetToDefault();
     } 
     public void TakeDamage(int amount)
     {
-        CurrentHealth -= amount;
-        OnHealthChanged(this, healthArgs.GetUpdatedArgs(CurrentHealth, MaxHealth));
-        healthBarView.UpdateHealthBar(this, healthArgs.GetUpdatedArgs(CurrentHealth, MaxHealth));
-        if (CurrentHealth < 1)
-        {
-            OnOutOfHealth?.Invoke();
+        if (CurrentHealth > 0){
+            CurrentHealth -= amount;
+            if (CurrentHealth <= 0){
+                CurrentHealth = 0;
+                OnOutOfHealth?.Invoke();
+            }
+            OnHealthChanged(this, healthArgs.GetUpdatedArgs(CurrentHealth, MaxHealth));
         }
     }
     public void Heal(int amount)
@@ -62,6 +62,5 @@ public class Health : MonoBehaviour, IDamageable,IHealable, IResettable
         MaxHealth = defaultMaxLives; // PlayerData.MaxHealth
         CurrentHealth = MaxHealth;
         OnHealthChanged(this, healthArgs.GetUpdatedArgs(CurrentHealth, MaxHealth));
-        healthBarView.UpdateHealthBar(this, healthArgs.GetUpdatedArgs(CurrentHealth, MaxHealth));
     }
 }
