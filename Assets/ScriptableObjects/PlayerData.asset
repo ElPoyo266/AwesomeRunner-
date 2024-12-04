@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9055f72a604bc3f4ba01bc120f0643d2, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  <InvincibilityTime>k__BackingField: 300
-  <JumpHeight>k__BackingField: 5.75
+  <InvincibilityTime>k__BackingField: 600
+  <JumpHeight>k__BackingField: 6
   <LaneSwitchSpeed>k__BackingField: 20
   <Speed>k__BackingField: 10
