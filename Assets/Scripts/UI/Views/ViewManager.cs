@@ -5,13 +5,13 @@ using UnityEngine;
 
 public class ViewManager : MonoBehaviour
 {
-    public static ViewManager Instance { get; private set; }    
+    public static ViewManager Instance { get; private set; }
     [SerializeField] private List<BaseView> views = new List<BaseView>();
     [SerializeField] private List<BaseView> defaultViews;
     [SerializeField] private bool autoInitialize;
     private void Awake()
     {
-        Instance = this;    
+        Instance = this;
     }
     private void Start()
     {
@@ -23,14 +23,14 @@ public class ViewManager : MonoBehaviour
         foreach (var view in views)
         {
             view.Init();
-            view.Show(false);   
+            view.Show(false);
         }
         if (defaultViews.IsEmpty())
             return;
         foreach (var view in defaultViews)
         {
             view.Show(true);
-        }     
+        }
     }
     public void Init<T>() where T : BaseView
     {
@@ -69,7 +69,7 @@ public class ViewManager : MonoBehaviour
     {
         view.Init();
         view.Show(isActiveByDefault);
-        views.Add(view);       
+        views.Add(view);
     }
 
     public void Remove(BaseView view)

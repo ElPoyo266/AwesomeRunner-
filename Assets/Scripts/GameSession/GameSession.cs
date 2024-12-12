@@ -89,7 +89,7 @@ public class GameSession : MonoBehaviour,IResettable
         scoreboard.AddScoreboardEntry(entry);
     }
 
-    public void RestartSession()
+    public void GoToGameScene()
     {
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
         ResetToDefault();
