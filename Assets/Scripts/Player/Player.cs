@@ -75,7 +75,9 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
 
     private void Update()
     {
-        PlayerStateMachine.Tick();   
+        PlayerData.Speed += 0.0001f;
+            // Add smthg to manage the animator speed 
+        PlayerStateMachine.Tick();
     }
     private void FixedUpdate()
     {
@@ -108,6 +110,7 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
 
     private void Die()
     {
+        PlayerData.Speed = initialSpeed;
         PlayerStateMachine.SetState(PlayerStateMachine.PlayerDeadState);
         GameSession.Instance.UpdateScoreboard(new ScoreboardEntry(name,PlayerStatictics.Score));
 

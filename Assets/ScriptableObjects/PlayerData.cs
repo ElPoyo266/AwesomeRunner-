@@ -7,5 +7,5 @@ public class PlayerData : ScriptableObject
     [field: SerializeField] public int InvincibilityTime {  get; private set; }
     [field: SerializeField] public float JumpHeight { get; private set; }
     [field: SerializeField] public float LaneSwitchSpeed { get; private set; }
-    [field: SerializeField] public float Speed { get; private set; }
+    [field: SerializeField] public float Speed { get; set; }
 }
