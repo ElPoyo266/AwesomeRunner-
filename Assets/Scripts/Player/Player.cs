@@ -117,7 +117,7 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
         PlayerStateMachine.SetState(PlayerStateMachine.PlayerDeadState);
         GameSession.Instance.UpdateScoreboard(new ScoreboardEntry(name,PlayerStatictics.Score));
 
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("DeathScreen");
     }
 
     public IEnumerator GrantInvincibility()

@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(RectTransform))]    
+[RequireComponent(typeof(RectTransform))]
 public class PlayerHUDView : BaseView
 {
     [SerializeField] private TMP_Text scoreText;
@@ -19,4 +19,5 @@ public class PlayerHUDView : BaseView
     {
         scoreText.text = $"Score: {score} "; 
     }
+
 }

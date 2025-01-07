@@ -6,13 +6,13 @@ public abstract class BaseView : MonoBehaviour
     [property: SerializeField] public string Tag { get; private set; }
     virtual public void Init()
     {
-        IsInitialized = true;   
+        IsInitialized = true;
     }
     virtual public void Destroy()
     {
         Destroy(this);
     }
-    public void Show(bool isActive)
+    public virtual void Show(bool isActive)
     {
         gameObject.SetActive(isActive);
     }
