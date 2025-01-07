@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,7 +9,7 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(Statistics))]
 
-public class Player : MonoBehaviour,IResettable, ICommandTranslator
+public class Player : MonoBehaviour, IResettable, ICommandTranslator
 {
     #region StateMachine
 
@@ -20,8 +21,13 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
 
     private Animator animator;
     [SerializeField] private AnimationCurve jumpDeltaYCurve;
-    public AnimationCurve JumpDeltaYCurve { get { return jumpDeltaYCurve; } }
-    public PlayerAnimator PlayerAnimator { get; private set; }  
+
+    public AnimationCurve JumpDeltaYCurve
+    {
+        get { return jumpDeltaYCurve; }
+    }
+
+    public PlayerAnimator PlayerAnimator { get; private set; }
 
     #endregion
 
@@ -30,14 +36,24 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
     [SerializeField] private PlayerData playerData;
     public IDamageable PlayerHealth { get; private set; }
     public Statistics PlayerStatictics { get; private set; }
-    public PlayerData PlayerData { get { return playerData; } }
-   
+
+    public PlayerData PlayerData
+    {
+        get { return playerData; }
+    }
+
     #endregion
 
     #region MovementControl
 
     [SerializeField] private LaneSystem laneSystem;
-    public LaneSystem LaneSystem { get { return laneSystem; } private set { laneSystem = value; } }
+
+    public LaneSystem LaneSystem
+    {
+        get { return laneSystem; }
+        private set { laneSystem = value; }
+    }
+
     public CharacterController CharacterController { get; private set; }
     public PlayerCollider PlayerCollider { get; private set; }
 
@@ -45,6 +61,7 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
 
     public bool IsInvincible { get; private set; }
     public float InvincibilityTime { get; private set; } //PLAYER DATA ScriptableObject
+    [SerializeField] private Boolean isPlayer2;
 
     private void Awake()
     {
@@ -53,16 +70,18 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
         if (animator)
             PlayerAnimator = new PlayerAnimator(animator);
         CharacterController = GetComponent<CharacterController>();
-        PlayerCollider = new PlayerCollider(CharacterController);   
+        PlayerCollider = new PlayerCollider(CharacterController);
         PlayerHealth = GetComponent<IDamageable>();
         PlayerStatictics = GetComponent<Statistics>();
         PlayerStateMachine = new PlayerStateMachine(this);
         InvincibilityTime = playerData.InvincibilityTime;
-    }  
+    }
+
     private void OnEnable()
     {
         PlayerHealth.OnOutOfHealth += Die;
     }
+
     // private void OnDisable()
     // {
     //     PlayerHealth.OnOutOfHealth -= Die;
@@ -75,27 +94,32 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
 
     private void Update()
     {
-        PlayerStateMachine.Tick();   
+        PlayerStateMachine.Tick();
     }
+
     private void FixedUpdate()
     {
         PlayerStateMachine.FixedTick();
-    } 
+    }
+
     public float PendingAdditionalOffset { get; private set; }
-    private void OnTriggerEnter(Collider other) 
+
+    private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent(out IDamageDealer damageDealer)) //switch..case
         {
             if (IsInvincible)
                 return;
-            int damageAmount = 1;       
+            int damageAmount = 1;
             var damageableComponents = GetComponents<IDamageable>();
             foreach (var component in damageableComponents)
             {
                 damageDealer.DealDamage(component, damageAmount);
             }
+
             StartCoroutine(GrantInvincibility());
         }
+
         if (other.TryGetComponent(out IObstacle obstacle)) //switch..case
         {
             obstacle.Impact();
@@ -109,7 +133,7 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
     private void Die()
     {
         PlayerStateMachine.SetState(PlayerStateMachine.PlayerDeadState);
-        GameSession.Instance.UpdateScoreboard(new ScoreboardEntry(name,PlayerStatictics.Score));
+        GameSession.Instance.UpdateScoreboard(new ScoreboardEntry(name, PlayerStatictics.Score));
 
         SceneManager.LoadScene("DeathScreen");
     }
@@ -120,11 +144,13 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
         yield return new WaitForSeconds(InvincibilityTime);
         IsInvincible = false;
     }
+
     private void ReloadAnimator()
     {
         if (animator)
             PlayerAnimator = new PlayerAnimator(animator);
     }
+
     public void ResetToDefault()
     {
         PlayerStateMachine.SetState(null);
@@ -138,22 +164,45 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
     {
         if (state.IsPressed)
         {
-            switch (command)
+            if (isPlayer2)
             {
-                case ECommand.RIGHT:
-                    PlayerStateMachine.IncreaseTargetLane();
-                    break;
-                case ECommand.LEFT:
-                    PlayerStateMachine.DecreaseTargetLane();
-                    break;
-                case ECommand.UP:
-                    PlayerStateMachine.SetState(PlayerStateMachine.PlayerJumpState);
-                    break;
-                case ECommand.DOWN:
-                    PlayerStateMachine.SetState(PlayerStateMachine.PlayerSlideState);
-                    break;
-                default:
-                    break;
+                switch (command)
+                {
+                    case ECommand.RIGHT2:
+                        PlayerStateMachine.IncreaseTargetLane();
+                        break;
+                    case ECommand.LEFT2:
+                        PlayerStateMachine.DecreaseTargetLane();
+                        break;
+                    case ECommand.UP2:
+                        PlayerStateMachine.SetState(PlayerStateMachine.PlayerJumpState);
+                        break;
+                    case ECommand.DOWN2:
+                        PlayerStateMachine.SetState(PlayerStateMachine.PlayerSlideState);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                switch (command)
+                {
+                    case ECommand.RIGHT:
+                        PlayerStateMachine.IncreaseTargetLane();
+                        break;
+                    case ECommand.LEFT:
+                        PlayerStateMachine.DecreaseTargetLane();
+                        break;
+                    case ECommand.UP:
+                        PlayerStateMachine.SetState(PlayerStateMachine.PlayerJumpState);
+                        break;
+                    case ECommand.DOWN:
+                        PlayerStateMachine.SetState(PlayerStateMachine.PlayerSlideState);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }

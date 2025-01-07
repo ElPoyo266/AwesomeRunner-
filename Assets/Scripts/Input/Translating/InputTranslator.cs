@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 
 public interface IInputTranslator
@@ -17,11 +18,11 @@ public class InputTranslator<T> : IInputTranslator where T : IBinding
     private List<ICommandTranslator> commandTranslators;
     private IBindingHolder<T> bindingHolder;
 
-    public InputTranslator(IBindingHolder<T> holder)
+    public InputTranslator(IBindingHolder<T> holder, Boolean isPlayer2)
     {
         commandTranslators = new List<ICommandTranslator>();
         bindingHolder = holder;
-        bindingHolder.Init();
+        bindingHolder.Init(isPlayer2);
     }
     //public void Init(IBindingHolder<T> holder)
     //{

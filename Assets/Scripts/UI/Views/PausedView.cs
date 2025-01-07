@@ -31,7 +31,7 @@ public class PausedView : BaseView
 
         restartButton.onClick.AddListener(() =>
         {
-            GameSession.Instance.GoToGameScene();
+            GameSession.Instance.GoToSoloMode();
         });
         base.Init();
     }

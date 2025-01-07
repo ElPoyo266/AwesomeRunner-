@@ -505,7 +505,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 533191356}
         m_TargetAssemblyTypeName: GameSession, Assembly-CSharp
-        m_MethodName: GoToGameScene
+        m_MethodName: GoToSoloMode
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

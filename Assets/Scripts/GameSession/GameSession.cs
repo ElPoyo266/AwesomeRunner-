@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,6 +9,8 @@ public class GameSession : MonoBehaviour,IResettable
 {
     [SerializeField] private Player currentPlayer;
     [SerializeField] private Scoreboard scoreboard;
+    [SerializeField] private Boolean isPlayer2;
+
     public static GameSession Instance { get; private set; } 
     public WorldCurver Curver { get; private set; }
     private IInputTranslator inputTranslator;
@@ -40,16 +43,8 @@ public class GameSession : MonoBehaviour,IResettable
 
     private void Init()
     {
-        if (ApplicationUtil.platform == RuntimePlatform.Android || ApplicationUtil.platform == RuntimePlatform.IPhonePlayer)
-        {
-            IBindingHolder<TouchBinding> touchHolder = new TouchBindingHolder();
-            inputTranslator = new InputTranslator<TouchBinding>(touchHolder);
-        }
-        else
-        {
-            IBindingHolder<KeyBinding> keyHolder = new KeyBindingHolder();
-            inputTranslator = new InputTranslator<KeyBinding>(keyHolder);
-        }
+        IBindingHolder<KeyBinding> keyHolder = new KeyBindingHolder();
+        inputTranslator = new InputTranslator<KeyBinding>(keyHolder, isPlayer2);
     }
 
     public void AddCommandTranslator(ICommandTranslator translator)
@@ -89,12 +84,17 @@ public class GameSession : MonoBehaviour,IResettable
         scoreboard.AddScoreboardEntry(entry);
     }
 
-    public void GoToGameScene()
+    public void GoToSoloMode()
     {
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
         ResetToDefault();
     }
-
+    
+    public void GoToDuoMode()
+    {
+        SceneManager.LoadScene("DuoGameScene", LoadSceneMode.Single);
+        ResetToDefault();
+    }
     public void GoToMainMenu()
     {
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
