@@ -21,9 +21,10 @@ public abstract class MovingState : PlayerState
 
     public override void Tick()
     {
+        speed = playerData.Speed;
         //HandleDirection();
-        playerSM.HorizontalDeltaPosition = speed * playerSM.PlayerTransform.forward * Time.deltaTime ;
-        playerSM.HorizontalDeltaPosition += playerSM.PlayerTransform.forward * speed * Time.deltaTime; 
+        playerSM.HorizontalDeltaPosition = playerSM.PlayerTransform.forward * speed * Time.deltaTime ;
+        playerSM.HorizontalDeltaPosition += playerSM.PlayerTransform.forward * speed * Time.deltaTime;
         playerSM.UpdateDistance(playerSM.HorizontalDeltaPosition.z); //вынести в контроллер
         SwitchLane();
         ApplyGravity();

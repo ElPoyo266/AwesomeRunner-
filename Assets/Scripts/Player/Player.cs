@@ -28,6 +28,8 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
     #region PlayerComponents
 
     [SerializeField] private PlayerData playerData;
+
+    private int initialSpeed;
     public IDamageable PlayerHealth { get; private set; }
     public Statistics PlayerStatictics { get; private set; }
     public PlayerData PlayerData { get { return playerData; } }
@@ -58,6 +60,7 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
         PlayerStatictics = GetComponent<Statistics>();
         PlayerStateMachine = new PlayerStateMachine(this);
         InvincibilityTime = playerData.InvincibilityTime;
+        initialSpeed = (int)playerData.Speed;
     }  
     private void OnEnable()
     {
