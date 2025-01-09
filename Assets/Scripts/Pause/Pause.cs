@@ -6,7 +6,7 @@ public class Pause : MonoBehaviour,ICommandTranslator
 {
     private void Start()
     {
-        GameSession.Instance.AddCommandTranslator(this);    
+        GameSession.Instance.AddCommandTranslator(this, false);    
     }
 
     public void TranslateCommand(ECommand command, PressedState state)

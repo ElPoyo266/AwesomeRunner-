@@ -42,7 +42,7 @@ public class Health : MonoBehaviour, IDamageable,IHealable, IResettable
     public void TakeDamage(int amount)
     {
         if (CurrentHealth > 0){
-            CurrentHealth -= amount;
+            //CurrentHealth -= amount; TODO: To change to take damage
             if (CurrentHealth <= 0){
                 CurrentHealth = 0;
                 OnOutOfHealth?.Invoke();

@@ -22,7 +22,7 @@ public class Scoreboard : MonoBehaviour, ICommandTranslator
 
     private void Start()
     {
-        GameSession.Instance.AddCommandTranslator(this);
+        GameSession.Instance.AddCommandTranslator(this, false);
         string jsonScoreboardEntries = PlayerPrefs.GetString("ScoreboardEntriesTableTest"); //Binary file
         ScoreboardEntriesTable entriesTable = JsonUtility.FromJson<ScoreboardEntriesTable>(jsonScoreboardEntries);
         if (entriesTable == null)

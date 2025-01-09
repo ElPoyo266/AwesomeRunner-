@@ -13,7 +13,8 @@ public class GameSession : MonoBehaviour,IResettable
 
     public static GameSession Instance { get; private set; } 
     public WorldCurver Curver { get; private set; }
-    private IInputTranslator inputTranslator;
+    private IInputTranslator _player1InputTranslator;
+    private IInputTranslator _player2InputTranslator;
 
     private bool isSessionPaused = false;
     private bool isInputAlreadyRestricted = false;
@@ -34,7 +35,9 @@ public class GameSession : MonoBehaviour,IResettable
     }
     private void Update()
     {
-       inputTranslator.Tick();
+       _player1InputTranslator.Tick();
+       _player2InputTranslator.Tick();
+
        Curver.Tick();
         // curver.SinCurveX();
         // Curver.SinCurveY();
@@ -43,26 +46,34 @@ public class GameSession : MonoBehaviour,IResettable
 
     private void Init()
     {
-        IBindingHolder<KeyBinding> keyHolder = new KeyBindingHolder();
-        inputTranslator = new InputTranslator<KeyBinding>(keyHolder, isPlayer2);
+        var player1Holder = new KeyBindingHolder();
+        player1Holder.Init(false);
+        _player1InputTranslator = new InputTranslator<KeyBinding>(player1Holder, false);
+
+        var player2Holder = new KeyBindingHolder();
+        player2Holder.Init(true);
+        _player2InputTranslator = new InputTranslator<KeyBinding>(player2Holder, true);
     }
 
-    public void AddCommandTranslator(ICommandTranslator translator)
+    public void AddCommandTranslator(ICommandTranslator translator, bool isPlayer2)
     {
-        inputTranslator.AddCommandTranslator(translator);
+        if (isPlayer2)
+            _player2InputTranslator.AddCommandTranslator(translator);
+        else
+            _player1InputTranslator.AddCommandTranslator(translator);
     }
 
   
     public void PauseSession(bool isPaused)
     {
         Time.timeScale = isPaused ? 0 : 1;
-        if (!isSessionPaused && inputTranslator.IsTranslationResticted(InputConstants.InGameCommands))
+        if (!isSessionPaused && _player1InputTranslator.IsTranslationResticted(InputConstants.InGameCommands) && _player2InputTranslator.IsTranslationResticted(InputConstants.InGameCommands) )
         {
             isInputAlreadyRestricted = true;
             isSessionPaused = isPaused;
             return;
         }
-        if (!inputTranslator.IsTranslationResticted(InputConstants.InGameCommands))
+        if (!_player1InputTranslator.IsTranslationResticted(InputConstants.InGameCommands) && !_player2InputTranslator.IsTranslationResticted(InputConstants.InGameCommands))
         {
             isInputAlreadyRestricted = false;
         }
@@ -76,7 +87,9 @@ public class GameSession : MonoBehaviour,IResettable
 
     public void RestrictInputs(List<ECommand> commands,bool isRestricted)
     {
-        inputTranslator.RestictTranslation(commands, isRestricted);
+        _player1InputTranslator.RestictTranslation(commands, isRestricted);
+        _player2InputTranslator.RestictTranslation(commands, isRestricted);
+
     }
 
     public void UpdateScoreboard(ScoreboardEntry entry)

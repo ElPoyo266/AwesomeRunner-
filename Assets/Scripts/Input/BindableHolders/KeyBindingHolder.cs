@@ -27,7 +27,7 @@ public class KeyBindingHolder : IBindingHolder<KeyBinding>
         {ECommand.RIGHT2, new KeyBinding(KeyCode.D)},
     };
 
-    public void Init(Boolean isPlayer2 = false)
+    public void Init(Boolean isPlayer2)
     {
         if (InputBindings == null)
             if (isPlayer2)

@@ -50,9 +50,16 @@ public class Player : MonoBehaviour, IResettable, ICommandTranslator
 
     public LaneSystem LaneSystem
     {
-        get { return laneSystem; }
-        private set { laneSystem = value; }
+        get
+        {
+            return laneSystem;
+        }
+        private set
+        {
+            laneSystem = value;
+        }
     }
+
 
     public CharacterController CharacterController { get; private set; }
     public PlayerCollider PlayerCollider { get; private set; }
@@ -65,7 +72,7 @@ public class Player : MonoBehaviour, IResettable, ICommandTranslator
 
     private void Awake()
     {
-        GameSession.Instance.AddCommandTranslator(this);
+        GameSession.Instance.AddCommandTranslator(this, isPlayer2);
         animator = GetComponent<Animator>();
         if (animator)
             PlayerAnimator = new PlayerAnimator(animator);
@@ -164,46 +171,28 @@ public class Player : MonoBehaviour, IResettable, ICommandTranslator
     {
         if (state.IsPressed)
         {
-            if (isPlayer2)
+            switch (command)
             {
-                switch (command)
-                {
-                    case ECommand.RIGHT2:
-                        PlayerStateMachine.IncreaseTargetLane();
-                        break;
-                    case ECommand.LEFT2:
-                        PlayerStateMachine.DecreaseTargetLane();
-                        break;
-                    case ECommand.UP2:
-                        PlayerStateMachine.SetState(PlayerStateMachine.PlayerJumpState);
-                        break;
-                    case ECommand.DOWN2:
-                        PlayerStateMachine.SetState(PlayerStateMachine.PlayerSlideState);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else
-            {
-                switch (command)
-                {
-                    case ECommand.RIGHT:
-                        PlayerStateMachine.IncreaseTargetLane();
-                        break;
-                    case ECommand.LEFT:
-                        PlayerStateMachine.DecreaseTargetLane();
-                        break;
-                    case ECommand.UP:
-                        PlayerStateMachine.SetState(PlayerStateMachine.PlayerJumpState);
-                        break;
-                    case ECommand.DOWN:
-                        PlayerStateMachine.SetState(PlayerStateMachine.PlayerSlideState);
-                        break;
-                    default:
-                        break;
-                }
+                case ECommand.RIGHT:
+                case ECommand.RIGHT2:
+                    PlayerStateMachine.IncreaseTargetLane();
+                    break;
+                case ECommand.LEFT:
+                case ECommand.LEFT2:
+                    PlayerStateMachine.DecreaseTargetLane();
+                    break;
+                case ECommand.UP:
+                case ECommand.UP2:
+                    PlayerStateMachine.SetState(PlayerStateMachine.PlayerJumpState);
+                    break;
+                case ECommand.DOWN:
+                case ECommand.DOWN2:
+                    PlayerStateMachine.SetState(PlayerStateMachine.PlayerSlideState);
+                    break;
+                default:
+                    break;
             }
         }
     }
+
 }
