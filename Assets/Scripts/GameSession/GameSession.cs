@@ -13,6 +13,7 @@ public class GameSession : MonoBehaviour,IResettable
     private IInputTranslator inputTranslator;
 
     private bool isSessionPaused = false;
+    private float speedAtPause;
     private bool isInputAlreadyRestricted = false;
 
     private void Awake()
@@ -60,6 +61,15 @@ public class GameSession : MonoBehaviour,IResettable
   
     public void PauseSession(bool isPaused)
     {
+
+        // Save the speed before pausing the game and restore it while the game resume
+        if (isPaused)
+        {
+            speedAtPause = currentPlayer.PlayerData.CurrentSpeed;
+        }else{
+            currentPlayer.PlayerData.CurrentSpeed = speedAtPause;
+        }
+        
         Time.timeScale = isPaused ? 0 : 1;
         if (!isSessionPaused && inputTranslator.IsTranslationResticted(InputConstants.InGameCommands))
         {

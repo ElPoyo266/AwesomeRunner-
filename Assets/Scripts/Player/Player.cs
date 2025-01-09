@@ -29,7 +29,6 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
 
     [SerializeField] private PlayerData playerData;
 
-    private int initialSpeed;
     public IDamageable PlayerHealth { get; private set; }
     public Statistics PlayerStatictics { get; private set; }
     public PlayerData PlayerData { get { return playerData; } }
@@ -60,7 +59,6 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
         PlayerStatictics = GetComponent<Statistics>();
         PlayerStateMachine = new PlayerStateMachine(this);
         InvincibilityTime = playerData.InvincibilityTime;
-        initialSpeed = (int)playerData.Speed;
     }  
     private void OnEnable()
     {
@@ -78,7 +76,7 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
 
     private void Update()
     {
-        PlayerData.Speed += 0.0001f;
+        playerData.CurrentSpeed += playerData.SpeedAcceleration / 100;
             // Add smthg to manage the animator speed 
         PlayerStateMachine.Tick();
     }
@@ -113,7 +111,7 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
 
     private void Die()
     {
-        PlayerData.Speed = initialSpeed;
+        PlayerData.CurrentSpeed = PlayerData.InitialSpeed;
         PlayerStateMachine.SetState(PlayerStateMachine.PlayerDeadState);
         GameSession.Instance.UpdateScoreboard(new ScoreboardEntry(name,PlayerStatictics.Score));
 
@@ -133,6 +131,7 @@ public class Player : MonoBehaviour,IResettable, ICommandTranslator
     }
     public void ResetToDefault()
     {
+        PlayerData.CurrentSpeed = PlayerData.InitialSpeed;
         PlayerStateMachine.SetState(null);
         PlayerStatictics.ResetToDefault();
         LaneSystem.ResetToDefault();
