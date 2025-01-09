@@ -343,7 +343,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c734ff3b010f1640a238a992583af1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <CurveStrengthY>k__BackingField: 0
+  <CurveStrengthY>k__BackingField: 0.0005
   <CurveStrengthX>k__BackingField: 0
   curveOrigin: {fileID: 1053166410}
 --- !u!1 &100036927
