@@ -91,9 +91,31 @@ public class GameSession : MonoBehaviour,IResettable
 
     public void GoToGameScene()
     {
-        SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+        StartCoroutine(LoadGameSceneAsync());
+    }
+
+    private IEnumerator LoadGameSceneAsync()
+    {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("GameScene", LoadSceneMode.Single);
+        asyncLoad.allowSceneActivation = false;
+
+        while (!asyncLoad.isDone)
+        {
+            // Indiquer la progression de chargement (0 à 0.9)
+            float progress = Mathf.Clamp01(asyncLoad.progress / 0.9f);
+            Debug.Log($"Loading progress: {progress * 100}%");
+
+            // Activer la scène lorsqu'elle est prête
+            if (asyncLoad.progress >= 0.9f)
+            {
+                asyncLoad.allowSceneActivation = true;
+            }
+
+            yield return null;
+        }
         ResetToDefault();
     }
+
 
     public void GoToMainMenu()
     {
@@ -104,6 +126,7 @@ public class GameSession : MonoBehaviour,IResettable
     public void ResetToDefault()
     {
         PauseSession(false);
-        currentPlayer.ResetToDefault();
+        if(currentPlayer !=null)
+            currentPlayer.ResetToDefault();
     }
 }
