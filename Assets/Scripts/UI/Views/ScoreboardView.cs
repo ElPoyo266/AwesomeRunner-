@@ -26,6 +26,15 @@ public class ScoreboardView : BaseView
             AddPlayerCard(cardData);
         }
     }
+    public void AddEntries(List<ScoreboardEntry> entries)
+    {
+        int rank = 1;
+        foreach (var entry in entries)
+        {
+            AddPlayerCard(new PlayerScoreboardCardData(rank + ".\t" + entry.Name, entry.Score.ToString()));
+            rank++;
+        }
+    }
        
     private void AddPlayerCard(PlayerScoreboardCardData cardData)
     {

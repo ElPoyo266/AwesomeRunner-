@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 public class ScoreboardEntriesTable
 {
@@ -13,12 +14,12 @@ public class ScoreboardEntriesTable
 
 public class Scoreboard : MonoBehaviour, ICommandTranslator
 {
+    [SerializeField] private ScoreboardView scoreboardView;
     [SerializeField] private int maxEntries;
     private List<ScoreboardEntry> entries = new List<ScoreboardEntry>();
 
     public event Action<ScoreboardEntry> OnEntryAdded;
 
-    [SerializeField] private ScoreboardView scoreboardView;
 
     private void Start()
     {
@@ -29,17 +30,15 @@ public class Scoreboard : MonoBehaviour, ICommandTranslator
             return;
         if (entriesTable.entries == null)
             return;
-        List<PlayerScoreboardCardData> scoreboardCardDatas = new List<PlayerScoreboardCardData>();  
         for (int i = 0; i < entriesTable.entries.Count; i++)
         {
             entries.Add(entriesTable.entries[i]);
             OnEntryAdded?.Invoke(entriesTable.entries[i]);
-            PlayerScoreboardCardData cardData = new PlayerScoreboardCardData(entriesTable.entries[i].Name, entriesTable.entries[i].Score.ToString());
-            scoreboardCardDatas.Add(cardData);
         }
-        SortScoreboardEntriesByHighscore(entries);
-        SortScoreboardCardsDatasByHighscore(scoreboardCardDatas);
-        scoreboardView.AddPlayerCards(scoreboardCardDatas);
+        
+        // Sort scores descending then creates cards (invert this order cause issues) 
+        entries.Sort((x, y) => y.Score.CompareTo(x.Score));
+        scoreboardView.AddEntries(entries.GetRange(0, maxEntries));
     }
 
     public void AddScoreboardEntry(string entryName, int entryScore)
@@ -68,11 +67,11 @@ public class Scoreboard : MonoBehaviour, ICommandTranslator
 
     public void SaveScoreboardEntriesTable()
     {
-        SortScoreboardEntriesByHighscore(entries);
         ScoreboardEntriesTable scoreboardEntriesTable = new ScoreboardEntriesTable(entries);
         string jsonScoreboardEntries = JsonUtility.ToJson(scoreboardEntriesTable);
         PlayerPrefs.SetString("ScoreboardEntriesTableTest", jsonScoreboardEntries);
         PlayerPrefs.Save();
+        
     }
 
     public void TranslateCommand(ECommand command, PressedState state)
