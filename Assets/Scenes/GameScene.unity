@@ -3820,6 +3820,10 @@ PrefabInstance:
       propertyPath: laneSystem
       value: 
       objectReference: {fileID: 106057762}
+    - target: {fileID: 7509186232753540492, guid: 01fa89ab9028c864b8560621b7d51f50, type: 3}
+      propertyPath: playerData
+      value: 
+      objectReference: {fileID: 11400000, guid: 928d6efd735c3814d955e3f955a0264a, type: 2}
     - target: {fileID: 7581911058254726377, guid: 01fa89ab9028c864b8560621b7d51f50, type: 3}
       propertyPath: m_Name
       value: Player

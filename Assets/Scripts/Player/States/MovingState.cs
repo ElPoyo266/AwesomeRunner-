@@ -12,7 +12,7 @@ public abstract class MovingState : PlayerState
     public MovingState(PlayerStateMachine playerStateMachine) : base(playerStateMachine)
     {
         this.playerSM = playerStateMachine;
-        speed = playerData.Speed;
+        speed = playerData.CurrentSpeed;
         laneSwitchSpeed = playerData.LaneSwitchSpeed;
     }
     public override void OnStateEnter(){}
@@ -21,7 +21,7 @@ public abstract class MovingState : PlayerState
 
     public override void Tick()
     {
-        speed = playerData.Speed;
+        speed = playerData.CurrentSpeed;
         //HandleDirection();
         playerSM.HorizontalDeltaPosition = playerSM.PlayerTransform.forward * speed * Time.deltaTime ;
         playerSM.HorizontalDeltaPosition += playerSM.PlayerTransform.forward * speed * Time.deltaTime;
